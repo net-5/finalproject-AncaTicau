@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Conference.Domain.Entities.Speakers>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center display-2">Dot net days speakers</h1>
+
+<div id="speakers-list" class="container mt-3">
+    @{
+        var speakers = new List<SpeakerListItemViewModel>
+        {
+            new SpeakerListItemViewModel
+            {
+                Name = "Aaron Stannard",
+                Position = "Co-founder of Petabridge",
+                PhotoUrl = "Aaron_Stannard.png",
+                SocialLinks = new List<SocialLink>
+                {
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Facebook,
+                        Url = "http://facebook.com/dotnetdays.ro"
+                    },
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Twitter,
+                        Url = "https://twitter.com/dotnetdaysro"
+                    },
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Meetup,
+                        Url = "https://meetup.com/NET-User-Group-Iasi/"
+                    }
+                }
+            },
+            new SpeakerListItemViewModel
+            {
+                Name = "Irina Scurtu",
+                Position = "Software Architect Endava",
+                PhotoUrl = "irina-scurtu-small.png",
+                SocialLinks = new List<SocialLink>
+                {
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Twitter,
+                        Url = "https://twitter.com/irina_scurtu"
+                    },
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Linkedin,
+                        Url = "https://www.linkedin.com/in/irinascurtu/"
+                    }
+                }
+            },
+            new SpeakerListItemViewModel
+            {
+                Name = "Michael Kaufmann",
+                Position = "Software Arhitect Microsoft",
+                PhotoUrl = "Michael_Kaufman.png",
+                SocialLinks = new List<SocialLink>
+                {
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Facebook,
+                        Url = "http://facebook.com/dotnetdays.ro"
+                    },
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Twitter,
+                        Url = "https://twitter.com/dotnetdaysro"
+                    }
+                }
+
+            },
+            new SpeakerListItemViewModel
+            {
+                Name = "Jon Galloway",
+                Position = "Executive director .NET Foundation",
+                PhotoUrl = "Jon-Galloway.jpeg",
+                SocialLinks = new List<SocialLink>
+                {
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Facebook,
+                        Url = "http://facebook.com/dotnetdays.ro"
+                    },
+                    new SocialLink
+                    {
+                        Type = SocialLinkType.Twitter,
+                        Url = "https://twitter.com/dotnetdaysro"
+                    }
+                }
+
+
+        }};
+
+
+    }
+    <div class="row text-center">
+        @{ await Html.RenderPartialAsync("_SpeakerList", speakers); }
+    </div>
+    <div class="row text-center">
+        @{ await Html.RenderPartialAsync("_SpeakerList", speakers); }
+    </div>
+
+</div>

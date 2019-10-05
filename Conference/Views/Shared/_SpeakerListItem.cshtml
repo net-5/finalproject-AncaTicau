@@ -1,0 +1,44 @@
+﻿@model SpeakerListItemViewModel
+
+<div class="speaker col-12 col-lg-3" style="background-image: url('/img/@Model.PhotoUrl');">
+    <div class="details">
+        <h3 class="name">@Model.Name</h3>
+        <h3 class="position">@Model.Position</h3>
+        
+        @if (Model.SocialLinks.Count > 0)
+        {
+            <ul class="speaker-socials mt-2">
+                @foreach (var socialLink in Model.SocialLinks)
+                {
+                    string socialLinkType = null;
+
+                    switch (socialLink.Type)
+                    {
+                        case SocialLinkType.Facebook:
+                            socialLinkType = "fa-facebook";
+                            break;
+                        case SocialLinkType.Twitter:
+                            socialLinkType = "fa-twitter";
+                            break;
+                        case SocialLinkType.Blog:
+                            socialLinkType = "fa-link";
+                            break;
+                        case SocialLinkType.Linkedin:
+                            socialLinkType = "fa-linkedin";
+                            break;
+                        case SocialLinkType.Meetup:
+                            socialLinkType = "fa-meetup";
+                            break;
+                    }
+
+                    if (socialLinkType == null)
+                    {
+                        continue;
+                    }
+
+                    <li><a href="@socialLink.Url" target="_blank" class="link"><i class="fab @socialLinkType"></i></a></li>
+                }
+            </ul>
+        }
+    </div>
+</div>
