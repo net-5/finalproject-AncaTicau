@@ -1,1 +1,2 @@
 # finalproject-AncaTicau
+Implemented Admin CRUD for Editions, Speakers, Sponsors, SponsorTypes, Talks, Workshops. Implemented for the end user Editions, Speakers, Sponsors, Workshops-Index and Details. Implementing TagHelpers for Edition, Speaker, SponsorType. Front end for Home Page and Speakers-implemented PartialView for SpeakerList and SpeakersListItem. Created Constants folder in Conference.Domain for SocialLinkType. 
