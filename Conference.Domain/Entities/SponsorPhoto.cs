@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Conference.Domain.Entities
+﻿namespace Conference.Domain.Entities
 {
-    public partial class SponsorPhoto
+    public class SponsorPhoto
     {
         public int SponsorId { get; set; }
         public int Id { get; set; }

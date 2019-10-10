@@ -1,31 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Conference.Domain.Entities;
 using Conference.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Conference.Admin.Controllers
+namespace Conference.Areas.Admin.Controllers
 {
     public class EditionsController : Controller
     {
-        private readonly IEditionService editionService;
+        private readonly IEditionService _editionService;
+
         public EditionsController(IEditionService editionService)
         {
-            this.editionService = editionService;
+            _editionService = editionService;
         }
-
-
 
         [Area("Admin")]
         // GET: Editions
         public ActionResult Index()
         {
-            var allEditions = editionService.GetAllEditions();
+            IEnumerable<Editions> allEditions = _editionService.GetAllEditions();
+
             return View(allEditions);
         }
 
@@ -33,7 +28,8 @@ namespace Conference.Admin.Controllers
         // GET: Editions/Details/5
         public ActionResult Details(int id)
         {
-            Editions editions = editionService.GetEditionById(id);
+            Editions editions = _editionService.GetEditionById(id);
+
             return View(editions);
         }
 
@@ -52,28 +48,25 @@ namespace Conference.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var addedEdition = editionService.AddEdition(model);
+                Editions addedEdition = _editionService.AddEdition(model);
                 if (addedEdition == null)
                 {
                     ModelState.AddModelError("Name", "Edition name nust be unique!");
                     return View(model);
                 }
-                else
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
         // GET: Editions/Edit/5
         public ActionResult Edit(int id)
         {
-            var edition = editionService.GetEditionById(id);
+            Editions edition = _editionService.GetEditionById(id);
+
             return View(edition);
         }
 
@@ -85,37 +78,34 @@ namespace Conference.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingEdition = editionService.GetEditionById(id);
+                Editions existingEdition = _editionService.GetEditionById(id);
+
                 TryUpdateModelAsync(existingEdition);
-                editionService.UpdateEdition(existingEdition);
+                _editionService.UpdateEdition(existingEdition);
+
                 return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
         // GET: Editions/Delete/5
         public ActionResult Delete(int id, bool? saveChangesError = false)
         {
-
-
             if (saveChangesError.GetValueOrDefault())
             {
                 ViewBag.ErrorMessage = "Delete failed. Try again, and if problem persists, contact your system administrator.";
             }
 
-            Editions editionToDelete = editionService.GetEditionById(id);
+            Editions editionToDelete = _editionService.GetEditionById(id);
+
             if (editionToDelete == null)
             {
                 return NotFound();
             }
-            else
-            {
-                return View(editionToDelete);
-            }
+
+            return View(editionToDelete);
         }
 
         [Area("Admin")]
@@ -126,14 +116,16 @@ namespace Conference.Admin.Controllers
         {
             try
             {
-                Editions editionToDelete = editionService.GetEditionById(id);
-                editionService.Delete(editionToDelete);
-                editionService.Save();
+                Editions editionToDelete = _editionService.GetEditionById(id);
+
+                _editionService.Delete(editionToDelete);
+                _editionService.Save();
             }
             catch (DataException)
             {
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }
+
             return RedirectToAction(nameof(Index));
         }
     }

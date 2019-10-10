@@ -1,39 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Conference.Domain.Entities;
 using Conference.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers
 {
     public class SponsorsController : Controller
     {
-        private readonly ISponsorService sponsorService;
+        private readonly ISponsorService _sponsorService;
+
         public SponsorsController(ISponsorService sponsorService)
         {
-            this.sponsorService = sponsorService;
+            _sponsorService = sponsorService;
         }
 
-        // GET: Sponsors
         public ActionResult Index()
         {
-            var allSponsors = sponsorService.GetAllSponsors();
+            IEnumerable<Sponsors> allSponsors = _sponsorService.GetAllSponsors();
+
             return View(allSponsors);
         }
 
-        // GET: Sponsors/Details/5
         public ActionResult Details(int id)
         {
-            Sponsors sponsors = sponsorService.GetSponsorById(id);
+            Sponsors sponsors = _sponsorService.GetSponsorById(id);
+
             if (sponsors == null)
             {
-                return RedirectToAction("NotFound", "Home");
+                return RedirectToAction("NotFoundPage", "Home");
             }
+
             return View(sponsors);
         }
     }

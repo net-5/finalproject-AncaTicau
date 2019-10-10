@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Conference.Domain.Entities
 {
-    public partial class Workshops
+    public class Workshops
     {
         public int Id { get; set; }
         public string Name { get; set; }

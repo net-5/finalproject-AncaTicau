@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Conference.Data
 {
@@ -16,58 +17,61 @@ namespace Conference.Data
         void Delete(Editions editionToDelete);
         void Save();
     }
+
     public class EditionRepository : IEditionRepository
     {
-        private readonly ConferenceContext conferenceContext;
+        private readonly ConferenceContext _conferenceContext;
+
         public EditionRepository(ConferenceContext conferenceContext)
         {
-            this.conferenceContext = conferenceContext;
+            _conferenceContext = conferenceContext;
         }
+
         public List<Editions> GetAllEditions()
         {
-            return conferenceContext.Editions.ToList();
+            return _conferenceContext.Editions.ToList();
         }
+
         public Editions AddEdition(Editions editionToBeAdded)
         {
-            var addedEdition = conferenceContext.Add(editionToBeAdded);
-            conferenceContext.SaveChanges();
+            EntityEntry<Editions> addedEdition = _conferenceContext.Add(editionToBeAdded);
+            _conferenceContext.SaveChanges();
+
             return addedEdition.Entity;
         }
 
 
         public Editions GetEditionById(int id)
         {
-            return conferenceContext.Editions.Find(id);
+            return _conferenceContext.Editions.Find(id);
         }
 
 
         public Editions Update(Editions editionToUpdate)
         {
-            var updatedEdition = conferenceContext.Update(editionToUpdate);
-            conferenceContext.SaveChanges();
+            EntityEntry<Editions> updatedEdition = _conferenceContext.Update(editionToUpdate);
+            _conferenceContext.SaveChanges();
+
             return updatedEdition.Entity;
         }
+
         public bool IsUniqueEdition(string editionName)
         {
-            int nr = conferenceContext.Editions.Count(x => x.Name == editionName);
-            if (nr == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            int nr = _conferenceContext.Editions.Count(x => x.Name == editionName);
+
+            return nr == 0;
         }
+
         public void Delete(Editions editionToDelete)
         {
-            editionToDelete = conferenceContext.Editions.Find(editionToDelete.Id);
-            conferenceContext.Editions.Remove(editionToDelete);
+            editionToDelete = _conferenceContext.Editions.Find(editionToDelete.Id);
 
+            _conferenceContext.Editions.Remove(editionToDelete);
         }
+
         public void Save()
         {
-            conferenceContext.SaveChanges();
+            _conferenceContext.SaveChanges();
         }
     }
 }

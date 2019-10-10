@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Conference.Domain.Entities;
 using Conference.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Conference.Admin.Controllers
+namespace Conference.Areas.Admin.Controllers
 {
     public class SponsorsController : Controller
     {
-        private readonly ISponsorService sponsorService;
+        private readonly ISponsorService _sponsorService;
+
         public SponsorsController(ISponsorService sponsorService)
         {
-            this.sponsorService = sponsorService;
+            _sponsorService = sponsorService;
         }
 
         [Area("Admin")]
         // GET: Sponsors
         public ActionResult Index()
         {
-            var allSponsors = sponsorService.GetAllSponsors();
+            IEnumerable<Sponsors> allSponsors = _sponsorService.GetAllSponsors();
+
             return View(allSponsors);
         }
 
@@ -31,11 +28,13 @@ namespace Conference.Admin.Controllers
         // GET: Sponsors/Details/5
         public ActionResult Details(int id)
         {
-            Sponsors sponsors = sponsorService.GetSponsorById(id);
+            Sponsors sponsors = _sponsorService.GetSponsorById(id);
+
             if (sponsors == null)
             {
-                return RedirectToAction("NotFound", "Home");
+                return RedirectToAction("NotFoundPage", "Home");
             }
+
             return View(sponsors);
         }
 
@@ -44,6 +43,7 @@ namespace Conference.Admin.Controllers
         public ActionResult Create()
         {
             var viewModel = new Sponsors();
+
             return View(viewModel);
         }
 
@@ -55,28 +55,25 @@ namespace Conference.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var addedSponsor = sponsorService.AddSponsor(model);
+                Sponsors addedSponsor = _sponsorService.AddSponsor(model);
+
                 if (addedSponsor == null)
                 {
                     ModelState.AddModelError("Name", "Sponsor name must be unique!");
                     return View(model);
                 }
-                else
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
         // GET: Sponsors/Edit/5
         public ActionResult Edit(int id)
         {
-            var sponsor = sponsorService.GetSponsorById(id);
+            Sponsors sponsor = _sponsorService.GetSponsorById(id);
 
             return View(sponsor);
         }
@@ -85,19 +82,19 @@ namespace Conference.Admin.Controllers
         // POST: Sponsors/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Editions model)
+        public ActionResult Edit(int id, Sponsors model)
         {
             if (ModelState.IsValid)
             {
-                var existingSponsor = sponsorService.GetSponsorById(id);
+                Sponsors existingSponsor = _sponsorService.GetSponsorById(id);
+
                 TryUpdateModelAsync(existingSponsor);
-                sponsorService.UpdateSponsor(existingSponsor);
+                _sponsorService.UpdateSponsor(existingSponsor);
+
                 return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
@@ -108,15 +105,15 @@ namespace Conference.Admin.Controllers
             {
                 ViewBag.ErrorMessage = "Delete failed. try again, and if problem persists, contact your system administrator.";
             }
-            Sponsors sponsorToDelete = sponsorService.GetSponsorById(id);
+
+            Sponsors sponsorToDelete = _sponsorService.GetSponsorById(id);
+
             if (sponsorToDelete == null)
             {
                 return NotFound();
             }
-            else
-            {
-                return View(sponsorToDelete);
-            }
+
+            return View(sponsorToDelete);
         }
 
         [Area("Admin")]
@@ -127,14 +124,16 @@ namespace Conference.Admin.Controllers
         {
             try
             {
-                Sponsors sponsorToDelete = sponsorService.GetSponsorById(id);
-                sponsorService.Delete(sponsorToDelete);
-                sponsorService.Save();
+                Sponsors sponsorToDelete = _sponsorService.GetSponsorById(id);
+
+                _sponsorService.Delete(sponsorToDelete);
+                _sponsorService.Save();
             }
             catch (DataException)
             {
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }
+
             return RedirectToAction(nameof(Index));
         }
     }

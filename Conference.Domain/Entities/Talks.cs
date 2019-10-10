@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Conference.Domain.Entities
 {
-    public partial class Talks
+    public class Talks
     {
-        public Talks()
-        {
-            Schedules = new HashSet<Schedules>();
-        }
-
         public int Id { get; set; }
         [DisplayName("Speaker")]
         public int SpeakerId { get; set; }

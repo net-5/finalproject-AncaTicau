@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Conference.Domain.Entities
 {
-    public partial class SponsorTypes
+    public class SponsorTypes
     {
-        public SponsorTypes()
-        {
-            Sponsors = new HashSet<Sponsors>();
-        }
-
         public int Id { get; set; }
         public string Name { get; set; }
         public int Order { get; set; }

@@ -1,9 +1,8 @@
 ﻿using Conference.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Conference.Data
 {
@@ -17,58 +16,60 @@ namespace Conference.Data
         void Delete(Workshops workshopToDelete);
         void Save();
     }
+
     public class WorkshopRepository : IWorkshopRepository
     {
-        private readonly ConferenceContext conferenceContext;
+        private readonly ConferenceContext _conferenceContext;
+
         public WorkshopRepository(ConferenceContext conferenceContext)
         {
-            this.conferenceContext = conferenceContext;
+            _conferenceContext = conferenceContext;
         }
+
         public List<Workshops> GetAllWorkshops()
         {
-            return conferenceContext.Workshops.Include(x => x.Speaker).ToList();
+            return _conferenceContext.Workshops.Include(x => x.Speaker).ToList();
         }
+
         public Workshops AddWorkshop(Workshops workshopToBeAdded)
         {
-            var addedWorkshop = conferenceContext.Add(workshopToBeAdded);
-            conferenceContext.SaveChanges();
+            EntityEntry<Workshops> addedWorkshop = _conferenceContext.Add(workshopToBeAdded);
+            _conferenceContext.SaveChanges();
+
             return addedWorkshop.Entity;
         }
 
-
         public Workshops GetWorkshopById(int id)
         {
-            return conferenceContext.Workshops.Find(id);
+            return _conferenceContext.Workshops.Include(x => x.Speaker).FirstOrDefault(x => x.Id == id);
         }
-
 
         public Workshops Update(Workshops workshopToUpdate)
         {
-            var updatedWorkshop = conferenceContext.Update(workshopToUpdate);
-            conferenceContext.SaveChanges();
+            EntityEntry<Workshops> updatedWorkshop = _conferenceContext.Update(workshopToUpdate);
+            _conferenceContext.SaveChanges();
+
             return updatedWorkshop.Entity;
         }
+
         public bool IsUniqueWorkshop(string workshopName)
         {
-            int nr = conferenceContext.Workshops.Count(x => x.Name == workshopName);
-            if (nr == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            int nr = _conferenceContext.Workshops.Count(x => x.Name == workshopName);
+
+            return nr == 0;
         }
+
         public void Delete(Workshops workshopToDelete)
         {
-            workshopToDelete = conferenceContext.Workshops.Find(workshopToDelete.Id);
-            conferenceContext.Workshops.Remove(workshopToDelete);
+            workshopToDelete = _conferenceContext.Workshops.Find(workshopToDelete.Id);
+
+            _conferenceContext.Workshops.Remove(workshopToDelete);
 
         }
+
         public void Save()
         {
-            conferenceContext.SaveChanges();
+            _conferenceContext.SaveChanges();
         }
     }
 }

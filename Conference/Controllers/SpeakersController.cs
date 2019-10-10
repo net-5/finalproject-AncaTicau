@@ -1,40 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Conference.Domain.Entities;
+using Conference.Interfaces;
+using Conference.Models;
 using Conference.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers
 {
     public class SpeakersController : Controller
     {
-        private readonly ISpeakerService speakerService;
-        public SpeakersController(ISpeakerService speakerService)
+        private readonly ISpeakerService _speakerService;
+        private readonly ISpeakerAppService _speakerAppService;
+
+        public SpeakersController(ISpeakerService speakerService, ISpeakerAppService speakerAppService)
         {
-            this.speakerService = speakerService;
+            _speakerService = speakerService;
+            _speakerAppService = speakerAppService;
         }
 
-        // GET: Speakers
         public ActionResult Index()
         {
-            var allSpeakers = speakerService.GetAllSpeakers();
-            return View(allSpeakers);
+            IList<SpeakerListItemViewModel> viewModel = _speakerAppService.GetSpeakerListViewModel(Url);
+
+            return View(viewModel);
         }
 
-        // GET: Speakers/Details/5
         public ActionResult Details(int id)
         {
-            Speakers speakers = speakerService.GetSpeakerById(id);
-            if (speakers == null)
+            Speakers speaker = _speakerService.GetSpeakerById(id);
+
+            if (speaker == null)
             {
-                return RedirectToAction("NotFound", "Home" );
+                return RedirectToAction("NotFoundPage", "Home" );
             }
-            return View(speakers);
+
+            SpeakerListItemViewModel viewModel = _speakerAppService.GetSpeakerListItemViewModel(Url, speaker);
+
+            return View(viewModel);
         }
     }
 }

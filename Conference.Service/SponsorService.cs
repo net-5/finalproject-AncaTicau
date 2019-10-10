@@ -1,7 +1,5 @@
 ﻿using Conference.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Conference.Data;
 
 namespace Conference.Service
@@ -17,58 +15,50 @@ namespace Conference.Service
     }
     public class SponsorService : ISponsorService
     {
-        private readonly ISponsorsRepository sponsorsRepository;
+        private readonly ISponsorsRepository _sponsorsRepository;
+
         public SponsorService(ISponsorsRepository sponsorsRepository)
         {
-            this.sponsorsRepository = sponsorsRepository;
+            _sponsorsRepository = sponsorsRepository;
         }
 
         private bool IsUniqueSponsor(string sponsorName)
         {
-            if (sponsorsRepository.IsUniqueSponsor(sponsorName) == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _sponsorsRepository.IsUniqueSponsor(sponsorName);
         }
         public Sponsors AddSponsor(Sponsors sponsorToBeAdded)
         {
             if (IsUniqueSponsor(sponsorToBeAdded.Name))
             {
-                return sponsorsRepository.AddSponsor(sponsorToBeAdded);
+                return _sponsorsRepository.AddSponsor(sponsorToBeAdded);
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public void Delete(Sponsors sponsorToDelete)
         {
-            sponsorsRepository.Delete(sponsorToDelete);
+            _sponsorsRepository.Delete(sponsorToDelete);
         }
 
         public IEnumerable<Sponsors> GetAllSponsors()
         {
-            return sponsorsRepository.GetAllSponsors();
+            return _sponsorsRepository.GetAllSponsors();
         }
 
         public Sponsors GetSponsorById(int id)
         {
-            return sponsorsRepository.GetSponsorsById(id);
+            return _sponsorsRepository.GetSponsorsById(id);
         }
 
         public void Save()
         {
-            sponsorsRepository.Save();
+            _sponsorsRepository.Save();
         }
 
         public Sponsors UpdateSponsor(Sponsors sponsorToUpdate)
         {
-            return sponsorsRepository.Update(sponsorToUpdate);
+            return _sponsorsRepository.Update(sponsorToUpdate);
         }
     }
 }

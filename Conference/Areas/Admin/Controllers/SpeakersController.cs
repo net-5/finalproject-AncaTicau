@@ -1,29 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Conference.Domain.Entities;
 using Conference.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Conference.Admin.Controllers
+namespace Conference.Areas.Admin.Controllers
 {
     public class SpeakersController : Controller
     {
-        private readonly ISpeakerService speakerService;
+        private readonly ISpeakerService _speakerService;
+
         public SpeakersController(ISpeakerService speakerService)
         {
-            this.speakerService = speakerService;
+            _speakerService = speakerService;
         }
 
         [Area("Admin")]
         // GET: Speakers
         public ActionResult Index()
         {
-            var allSpeakers = speakerService.GetAllSpeakers();
+            IEnumerable<Speakers> allSpeakers = _speakerService.GetAllSpeakers();
+
             return View(allSpeakers);
         }
 
@@ -31,11 +28,13 @@ namespace Conference.Admin.Controllers
         // GET: Speakers/Details/5
         public ActionResult Details(int id)
         {
-            Speakers speakers = speakerService.GetSpeakerById(id);
+            Speakers speakers = _speakerService.GetSpeakerById(id);
+
             if (speakers == null)
             {
-                return RedirectToAction("NotFound", "Home" );
+                return RedirectToAction("NotFoundPage", "Home" );
             }
+
             return View(speakers);
         }
 
@@ -55,28 +54,25 @@ namespace Conference.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var addedSpeaker = speakerService.AddSpeaker(model);
+                Speakers addedSpeaker = _speakerService.AddSpeaker(model);
+
                 if (addedSpeaker == null)
                 {
                     ModelState.AddModelError("Name", "Speaker name must be unique!");
                     return View(model);
                 }
-                else
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
         // GET: Speakers/Edit/5
         public ActionResult Edit(int id)
         {
-            var speaker = speakerService.GetSpeakerById(id);
+            Speakers speaker = _speakerService.GetSpeakerById(id);
 
             return View(speaker);
         }
@@ -85,19 +81,19 @@ namespace Conference.Admin.Controllers
         // POST: Speakers/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Editions model)
+        public ActionResult Edit(int id, Speakers model)
         {
             if (ModelState.IsValid)
             {
-                var existingSpeaker = speakerService.GetSpeakerById(id);
+                Speakers existingSpeaker = _speakerService.GetSpeakerById(id);
+
                 TryUpdateModelAsync(existingSpeaker);
-                speakerService.UpdateSpeaker(existingSpeaker);
+                _speakerService.UpdateSpeaker(existingSpeaker);
+
                 return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
@@ -108,15 +104,15 @@ namespace Conference.Admin.Controllers
             {
                 ViewBag.ErrorMessage = "Delete failed. try again, and if problem persists, contact your system administrator.";
             }
-            Speakers speakerToDelete = speakerService.GetSpeakerById(id);
+
+            Speakers speakerToDelete = _speakerService.GetSpeakerById(id);
+
             if (speakerToDelete == null)
             {
                 return NotFound();
             }
-            else
-            {
-                return View(speakerToDelete);
-            }
+
+            return View(speakerToDelete);
         }
 
         [Area("Admin")]
@@ -127,14 +123,16 @@ namespace Conference.Admin.Controllers
         {
             try
             {
-                Speakers speakerToDelete = speakerService.GetSpeakerById(id);
-                speakerService.Delete(speakerToDelete);
-                speakerService.Save();
+                Speakers speakerToDelete = _speakerService.GetSpeakerById(id);
+
+                _speakerService.Delete(speakerToDelete);
+                _speakerService.Save();
             }
             catch (DataException)
             {
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }
+
             return RedirectToAction(nameof(Index));
         }
     }

@@ -1,20 +1,20 @@
 ﻿/* _Layout begin */
 
 html {
-    font-size: 62.5%;
     position: relative;
     min-height: 100%;
+    font-family: Roboto;
 }
 
-/*body {*/
-    /* Margin bottom by footer height 
-    margin-bottom: 60px;
-    font-size: 1.5rem;
-}*/
-
 .navbar {
+    padding-top: 0;
+    padding-bottom: 0;
     background-color: #442359 !important;
     border: 0 none !important;
+}
+
+#logo {
+    width: 11rem;
 }
 
 ul {
@@ -22,20 +22,19 @@ ul {
 }
 
 #header .nav-link {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
     color: rgba(255, 255, 255, 1);
 }
 
 .menu-socials {
     display: inline-flex;
     margin: 0;
-    line-height: 2.4rem;
-    font-size: 2.4rem;
+    font-size: 1.5rem;
 }
 
 .menu-socials .link {
     margin: 0;
-    padding: 0 1rem 0 0;
+    padding: 0 0.7rem 0 0;
     color: white;
 }
 
@@ -44,7 +43,7 @@ ul {
 }
 
 button.accept-policy {
-    font-size: 1rem;
+    font-size: 0.7rem;
     line-height: inherit;
 }
 
@@ -52,7 +51,8 @@ button.accept-policy {
 /* Home page begin */
 
 #presentation {
-    background-image: url(../img/Some-important-conferences-for-Dot-Net-Developers.jpg);
+    padding: 0;
+    background-image: url(../img/presentation.png);
     background-repeat: no-repeat;
     background-position: top;
     background-attachment: fixed;
@@ -61,30 +61,33 @@ button.accept-policy {
 }
 
 #presentation .container {
-    padding: 16rem 0;
+    padding: 7rem 0 12rem;
 }
 
 #presentation .top {
+    font-size: 1.1rem;
     text-transform: uppercase;
     color: #6EC2E8;
     font-weight: 600;
 }
 
 #presentation .edition {
-    font-size: 6rem;
+    font-size: 3.4rem;
+    font-weight: 700;
 }
 
 #presentation .location {
-    font-size: 1.8rem;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
 }
 
-#speakers-list {
-    max-width: 1400px;
+.container {
+    max-width: 1410px;
 }
 
 #speakers-list .speaker {
     padding: 0;
-    height: 35rem;
+    height: 31rem;
     overflow: hidden;
     background-position: top;
     background-size: contain;
@@ -97,10 +100,10 @@ button.accept-policy {
 
 .speaker .details {
     width: 100%;
-    height: 15rem;
+    height: 9rem;
     bottom: 0;
     background: #442359;
-    opacity: 0.7;
+    opacity: 0.85;
     color: white;
     display: flex;
     justify-content: center;
@@ -108,18 +111,32 @@ button.accept-policy {
 }
 
 .speaker .details .name {
-    font-size: 3.2rem;
+    font-size: 2rem;
     font-weight: 600;
 }
 
-.speaker-socials {
+.speaker .details .position {
     margin: 0;
+    font-size: 1.2rem;
+}
+
+.speaker .details .link {
+    color: white;
+    outline: 0 none;
+}
+
+.speaker .details .link:hover {
+    text-decoration: none;
+    outline: 0 none;
+}
+
+.speaker-socials {
+    margin: 0.5rem 0 0 0;
     padding: 0;
     display: flex;
     justify-content: center;
     flex-direction: row;
-    font-size: 2.4rem;
-    line-height: 2.4rem;
+    font-size: 1.5rem;
 }
 
 .speaker-socials .link {
@@ -129,10 +146,17 @@ button.accept-policy {
     text-decoration: none;
 }
 
+#main {
+    padding-bottom: 13rem;
+}
+
 .footer {
+    position: absolute;
+    bottom: 0;
     width: 100%;
-    padding-top: 2rem;
-    font-size: 1.5rem;
+    height: 13rem;
+    padding-top: 1rem;
+    font-size: 1rem;
     font-weight: 400;
     background-color: #442359;
 }
@@ -142,23 +166,240 @@ button.accept-policy {
 }
 
 .footer-socials {
-    font-size: 4rem;
+    padding: 0;
+    font-size: 2.5rem;
     text-align: center;
 }
 
 .footer-socials> li {
     display: inline-block;
-    margin-right: 2rem;
+    margin-right: 1rem;
 }
 
 .footer h4 {
+    margin: 0;
     text-align: center;
     color: white;
+    font-size: 1rem;
+}
+
+.footer-links li {
+    margin-top: 0.5rem;
+}
+
+.footer .socials {
+    align-self: center;
 }
 
 /* Home page end */
 /* Speakers page begin */
 
+.title1 {
+    font-weight: 600;
+    color: #442359;
+}
 
+/* Speakers page end */
+/* Speaker page begin */
 
-/*Speakers page end*/
+.title2 {
+    color: #6ec2e9;
+    font-size: 1.2rem;
+}
+
+.title3 {
+    color: #442359;
+    font-size: 3.5rem;
+    font-weight: 600;
+}
+
+.title4, #speaker-details .workshops .workshop {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.title5 {
+    color: #442359;
+    font-size: 1.2rem;
+    font-weight: 300;   
+}
+
+.title6, .title7 {
+    color: white;
+}
+
+.title6 {
+    font-size: 1rem;
+}
+
+.title7 {
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+#speaker-details .description {
+    color: #442359;
+}
+
+#speaker-details .photo, #workshop-details .speakers .photo {
+    padding: 0;
+    height: 31rem;
+    overflow: hidden;
+    background-position: top;
+    background-size: contain;
+    background-repeat: no-repeat;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    display: flex;
+}
+
+#speaker-details .speaker-socials {
+    justify-content: left;
+}
+
+#speaker-details .speaker-socials i {
+    color: #6ec2e9;
+}
+
+#speaker-details .workshops, #workshop-details .speakers {
+    background-color: #442359;
+}
+
+#speaker-details .photo-wrapper {
+    padding-right: 15px;
+}
+
+#speaker-details .photo-wrapper, #speaker-details .details, #speaker-details .workshops, #workshop-details .details, #workshop-details .speakers {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+#speaker-details .workshops .workshop, #workshop-details .speakers .speaker {
+    padding: 0;
+    margin-top: 2rem;
+    font-size: 2.2rem;
+}
+
+#speaker-details .workshops .link, #workshop-details .speaker .link {
+    color: white;
+    outline: 0 none;
+}
+
+#speaker-details .workshops .link:hover, #workshop-details .speaker .link:hover {
+    text-decoration: none;
+}
+
+/* Speaker page end */
+/* Workshops page begin */
+
+.workshops-wrapper {
+    padding-bottom: 2rem;
+}
+
+.talk-time {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: left;
+    color: #6ec2e9;
+}
+
+.workshops-wrapper .workshop {
+    max-height: 28rem;
+}
+
+.workshop {
+    padding-bottom: 10rem;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.workshop .title {
+    margin-top: 0.5rem;
+    font-size: 2rem;
+}
+
+.workshop .title a, .workshop .title a:hover {
+    color: #442359;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.workshop .organizer {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 2.8rem;
+    color: #442359;
+}
+
+.workshop .btn {
+    position: absolute;
+    bottom: 0;
+    width: 92%;
+}
+
+/* Workshops page end */
+/* Workshop page start */
+
+#workshop-details .details h3.blue {
+    color: #6ec2e9;
+}
+
+#workshop-details .details ul li {
+    list-style: disc;
+}
+
+#workshop-details .details ul.square li {
+    list-style: square;
+}
+
+#workshop-details .details ul li:not(:first-child) {
+    margin-top: 0.5rem;
+}
+
+#workshop-details .speakers .photo {
+    height: 10rem;
+    background-position: left;
+}
+
+#workshop-details .speakers .speaker {
+    margin-top: 0;
+}
+
+#workshop-details .speakers .speaker-socials {
+    justify-content: left;
+}
+
+/* Workshop page end */
+/* Admin pages start */
+.admin.container {
+    max-width: 2560px;
+}
+
+/* Admin pages end */
+/* Media queries begin */
+
+@media (max-width: 576px) {
+    .workshop:not(:first-child) {
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-links {
+        padding: 0;
+        text-align: center;
+    }
+
+    #main {
+        padding-bottom: 24rem;
+    }
+
+    .footer {
+        height: 24rem;
+    }
+}
+
+/* Media queries end */

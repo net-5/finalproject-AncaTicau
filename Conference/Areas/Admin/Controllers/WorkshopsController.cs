@@ -1,29 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Conference.Domain.Entities;
 using Conference.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Conference.Admin.Controllers
+namespace Conference.Areas.Admin.Controllers
 {
     public class WorkshopsController : Controller
     {
-        private readonly IWorkshopService workshopService;
+        private readonly IWorkshopService _workshopService;
+
         public WorkshopsController(IWorkshopService workshopService)
         {
-            this.workshopService = workshopService;
+            this._workshopService = workshopService;
         }
 
         [Area("Admin")]
         // GET: Workshops
         public ActionResult Index()
         {
-            var allWorkshops = workshopService.GetAllWorkshops();
+            IEnumerable<Workshops> allWorkshops = _workshopService.GetAllWorkshops();
+
             return View(allWorkshops);
         }
 
@@ -31,7 +29,8 @@ namespace Conference.Admin.Controllers
         // GET: Workshops/Details/5
         public ActionResult Details(int id)
         {
-            Workshops workshops = workshopService.GetWorkshopById(id);
+            Workshops workshops = _workshopService.GetWorkshopById(id);
+
             return View(workshops);
         }
 
@@ -50,31 +49,28 @@ namespace Conference.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var addedWorkshop = workshopService.AddWorkshop(model);
+                Workshops addedWorkshop = _workshopService.AddWorkshop(model);
+
                 if (addedWorkshop == null)
                 {
                     ModelState.AddModelError("Name", "Workshop name nust be unique!");
                     return View(model);
                 }
-                else
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
         // GET: Workshops/Edit/5
         public ActionResult Edit(int id)
         {
-            var workshop = workshopService.GetWorkshopById(id);
+            Workshops workshop = _workshopService.GetWorkshopById(id);
+
             return View(workshop);
         }
-
 
         [Area("Admin")]
         // POST: Workshops/Edit/5
@@ -84,15 +80,15 @@ namespace Conference.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingWorkshop = workshopService.GetWorkshopById(id);
+                Workshops existingWorkshop = _workshopService.GetWorkshopById(id);
+
                 TryUpdateModelAsync(existingWorkshop);
-                workshopService.UpdateWorkshop(existingWorkshop);
+                _workshopService.UpdateWorkshop(existingWorkshop);
+
                 return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
@@ -104,15 +100,14 @@ namespace Conference.Admin.Controllers
                 ViewBag.ErrorMessage = "Delete failed. Try again, and if problem persists, contact your system administrator.";
             }
 
-            Workshops workshopToDelete = workshopService.GetWorkshopById(id);
+            Workshops workshopToDelete = _workshopService.GetWorkshopById(id);
+
             if (workshopToDelete == null)
             {
                 return NotFound();
             }
-            else
-            {
-                return View(workshopToDelete);
-            }
+
+            return View(workshopToDelete);
         }
 
         [Area("Admin")]
@@ -123,14 +118,16 @@ namespace Conference.Admin.Controllers
         {
             try
             {
-                Workshops workshopToDelete = workshopService.GetWorkshopById(id);
-                workshopService.Delete(workshopToDelete);
-                workshopService.Save();
+                Workshops workshopToDelete = _workshopService.GetWorkshopById(id);
+
+                _workshopService.Delete(workshopToDelete);
+                _workshopService.Save();
             }
             catch (DataException)
             {
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }
+
             return RedirectToAction(nameof(Index));
         }
     }

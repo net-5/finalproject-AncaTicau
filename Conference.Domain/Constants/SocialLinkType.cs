@@ -4,8 +4,9 @@
     {
         public const string Facebook = nameof(Facebook);
         public const string Twitter = nameof(Twitter);
-        public const string Blog = nameof(Blog);
-        public const string Linkedin = nameof(Linkedin);
-        public const string Meetup = nameof(Meetup);
+        public const string Website = nameof(Website);
+        public const string LinkedIn = nameof(LinkedIn);
+        public const string Skype = nameof(Skype);
+        public const string GitHub = nameof(GitHub);
     }
 }

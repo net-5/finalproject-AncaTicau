@@ -79,37 +79,36 @@
             </div>
         </nav>
     </header>
-    <main role="main">
+    <main id="main" role="main">
         @RenderBody()
     </main>
     <footer class="footer">
-        <div class="container pb-3">
+        <div class="container">
             <div class="row">
                 <div class="about col-12 col-md-4">
-                    <ul>
+                    <ul class="footer-links">
                         <li>
                             <a href="mailto:info@dotnetdays.ro">Contact Us</a>
                         </li>
                         <li>
-                            <a href="/Privacy">Privacy</a>
+                            <a href="javascript:void(0)">Privacy</a>
                         </li>
                         <li>
-                            <a href="/CoC">Code of Conduct</a>
+                            <a href="javascript:void(0)">Code of Conduct</a>
                         </li>
                         <li>
-                            <a href="">Terms &amp; Conditions</a>
+                            <a href="javascript:void(0)">Terms &amp; Conditions</a>
                         </li>
                     </ul>
                 </div>
-                <div class="current-edition col-12 col-md-4">
-                    <ul>
+                <div class="col-12 col-md-4">
+                    <ul class="footer-links">
                         <li>
-                            <a href="/2019/About">About Us</a>
+                            <a href="javascript:void(0)">About Us</a>
                         </li>
                         <li>
-                            <a href="/BeASponsor">Become a sponsor</a>
+                            <a href="javascript:void(0)">Become a sponsor</a>
                         </li>
-
                     </ul>
                 </div>
                 <div class="socials col-12 col-md-4">
@@ -119,13 +118,11 @@
                             <a href="http://facebook.com/dotnetdays.ro" target="_blank">
                                 <span class="fab fa-facebook"></span>
                             </a>
-                        </li>
-                        <li>
+                        </li><li>
                             <a href="https://twitter.com/dotnetdaysro" target="_blank">
                                 <span class="fab fa-twitter"></span>
                             </a>
-                        </li>
-                        <li>
+                        </li><li>
                             <a href="https://meetup.com/NET-User-Group-Iasi/" target="_blank">
                                 <span class="fab fa-meetup"></span>
                             </a>
@@ -134,7 +131,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="text-center text-white col-sm-12">© 2019 - DotNetIasi</div>
+                <div class="text-center text-white col-12">© @DateTime.Now.Year - DotNetIasi</div>
             </div>
         </div>
     </footer>

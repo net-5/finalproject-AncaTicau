@@ -1,36 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Conference.Domain.Entities;
+using Conference.Interfaces;
+using Conference.Models;
 using Conference.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Conference.Areas.Admin.Controllers
+namespace Conference.Controllers
 {
     public class WorkshopsController : Controller
     {
-        private readonly IWorkshopService workshopService;
-        public WorkshopsController(IWorkshopService workshopService)
+        private readonly IWorkshopService _workshopService;
+        private readonly IWorkshopAppService _workshopAppService;
+
+        public WorkshopsController(IWorkshopService workshopService, IWorkshopAppService workshopAppService)
         {
-            this.workshopService = workshopService;
+            _workshopService = workshopService;
+            _workshopAppService = workshopAppService;
         }
 
-        // GET: Workshops
         public ActionResult Index()
         {
-            var allWorkshops = workshopService.GetAllWorkshops();
-            return View(allWorkshops);
+            IList<WorkshopListItemViewModel> viewModel = _workshopAppService.GetWorkshopListViewModel(Url);
+
+            return View(viewModel);
         }
 
-        // GET: Workshops/Details/5
         public ActionResult Details(int id)
         {
-            Workshops workshops = workshopService.GetWorkshopById(id);
-            return View(workshops);
+            Workshops workshop = _workshopService.GetWorkshopById(id);
+
+            if (workshop == null)
+            {
+                return RedirectToAction("NotFoundPage", "Home");
+            }
+
+            WorkshopListItemViewModel viewModel = _workshopAppService.GetWorkshopListItemViewModel(Url, workshop);
+
+            return View(viewModel);
         }
     }
 }

@@ -1,108 +1,15 @@
-﻿@model IEnumerable<Conference.Domain.Entities.Speakers>
+﻿@model ICollection<SpeakerListItemViewModel>
 
 @{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Speakers";
+
+    List<SpeakerListItemViewModel> speakers = DummyEntity.Speakers.ToList();
+    speakers.AddRange(speakers);
+    speakers.AddRange(speakers);
 }
 
-<h1 class="text-center display-2">Dot net days speakers</h1>
+<div id="speakers-list" class="container mt-1">
+    <h1 class="title1 display-4">Speakers</h1>
 
-<div id="speakers-list" class="container mt-3">
-    @{
-        var speakers = new List<SpeakerListItemViewModel>
-        {
-            new SpeakerListItemViewModel
-            {
-                Name = "Aaron Stannard",
-                Position = "Co-founder of Petabridge",
-                PhotoUrl = "Aaron_Stannard.png",
-                SocialLinks = new List<SocialLink>
-                {
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Facebook,
-                        Url = "http://facebook.com/dotnetdays.ro"
-                    },
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Twitter,
-                        Url = "https://twitter.com/dotnetdaysro"
-                    },
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Meetup,
-                        Url = "https://meetup.com/NET-User-Group-Iasi/"
-                    }
-                }
-            },
-            new SpeakerListItemViewModel
-            {
-                Name = "Irina Scurtu",
-                Position = "Software Architect Endava",
-                PhotoUrl = "irina-scurtu-small.png",
-                SocialLinks = new List<SocialLink>
-                {
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Twitter,
-                        Url = "https://twitter.com/irina_scurtu"
-                    },
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Linkedin,
-                        Url = "https://www.linkedin.com/in/irinascurtu/"
-                    }
-                }
-            },
-            new SpeakerListItemViewModel
-            {
-                Name = "Michael Kaufmann",
-                Position = "Software Arhitect Microsoft",
-                PhotoUrl = "Michael_Kaufman.png",
-                SocialLinks = new List<SocialLink>
-                {
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Facebook,
-                        Url = "http://facebook.com/dotnetdays.ro"
-                    },
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Twitter,
-                        Url = "https://twitter.com/dotnetdaysro"
-                    }
-                }
-
-            },
-            new SpeakerListItemViewModel
-            {
-                Name = "Jon Galloway",
-                Position = "Executive director .NET Foundation",
-                PhotoUrl = "Jon-Galloway.jpeg",
-                SocialLinks = new List<SocialLink>
-                {
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Facebook,
-                        Url = "http://facebook.com/dotnetdays.ro"
-                    },
-                    new SocialLink
-                    {
-                        Type = SocialLinkType.Twitter,
-                        Url = "https://twitter.com/dotnetdaysro"
-                    }
-                }
-
-
-        }};
-
-
-    }
-    <div class="row text-center">
-        @{ await Html.RenderPartialAsync("_SpeakerList", speakers); }
-    </div>
-    <div class="row text-center">
-        @{ await Html.RenderPartialAsync("_SpeakerList", speakers); }
-    </div>
-
+    @{ await Html.RenderPartialAsync("_SpeakerList", Model); }
 </div>

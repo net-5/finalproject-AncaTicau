@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Conference.Domain.Entities
+﻿namespace Conference.Domain.Entities
 {
-    public partial class Schedules
+    public class Schedules
     {
         public int Id { get; set; }
         public int RoomId { get; set; }

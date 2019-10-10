@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Conference.Domain.Entities;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Conference.Data
 {
@@ -18,66 +17,58 @@ namespace Conference.Data
         void Save();
     }
 
-
     public class SponsorsRepository : ISponsorsRepository
     {
-        private readonly ConferenceContext conferenceContext;
+        private readonly ConferenceContext _conferenceContext;
 
         public SponsorsRepository(ConferenceContext conferenceContext)
         {
-            this.conferenceContext = conferenceContext;
+            _conferenceContext = conferenceContext;
         }
 
         public List<Sponsors> GetAllSponsors()
         {
-            return conferenceContext.Sponsors.Include(x => x.SponsorType).ToList();
+            return _conferenceContext.Sponsors.Include(x => x.SponsorType).ToList();
         }
 
         public Sponsors AddSponsor(Sponsors sponsorToBeAdded)
         {
-            var addedSponsor = conferenceContext.Add(sponsorToBeAdded);
-            conferenceContext.SaveChanges();
+            EntityEntry<Sponsors> addedSponsor = _conferenceContext.Add(sponsorToBeAdded);
+            _conferenceContext.SaveChanges();
+
             return addedSponsor.Entity;
         }
 
         public Sponsors GetSponsorsById(int id)
         {
-            return conferenceContext.Sponsors.Find(id);
+            return _conferenceContext.Sponsors.Find(id);
         }
 
         public Sponsors Update(Sponsors sponsorToUpdate)
         {
-            var updatedSponsor = conferenceContext.Update(sponsorToUpdate);
-            conferenceContext.SaveChanges();
+            EntityEntry<Sponsors> updatedSponsor = _conferenceContext.Update(sponsorToUpdate);
+            _conferenceContext.SaveChanges();
+
             return updatedSponsor.Entity;
         }
 
         public bool IsUniqueSponsor(string sponsorName)
         {
-            int nr = conferenceContext.Sponsors.Count(x => x.Name == sponsorName);
-            if (nr == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            int nr = _conferenceContext.Sponsors.Count(x => x.Name == sponsorName);
 
+            return nr == 0;
         }
-
 
         public void Delete(Sponsors sponsorToDelete)
         {
-            sponsorToDelete = conferenceContext.Sponsors.Find(sponsorToDelete.Id);
-            conferenceContext.Sponsors.Remove(sponsorToDelete);
+            sponsorToDelete = _conferenceContext.Sponsors.Find(sponsorToDelete.Id);
 
+            _conferenceContext.Sponsors.Remove(sponsorToDelete);
         }
+
         public void Save()
         {
-            conferenceContext.SaveChanges();
+            _conferenceContext.SaveChanges();
         }
-
-
     }
 }

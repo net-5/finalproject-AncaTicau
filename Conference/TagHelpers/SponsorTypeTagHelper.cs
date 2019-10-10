@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Conference.Domain.Entities;
 using Conference.Service;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.Runtime.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace Conference.TagHelpers
 {
@@ -16,7 +11,7 @@ namespace Conference.TagHelpers
     [HtmlTargetElement("sponsorType", Attributes =ForAttributeName)]
     public class SponsorTypeTagHelper : TagHelper
     {
-        private readonly ISponsorTypeService sponsorTypeService;
+        private readonly ISponsorTypeService _sponsorTypeService;
 
         private const string ForAttributeName = "asp-for";
 
@@ -26,30 +21,35 @@ namespace Conference.TagHelpers
 
         public SponsorTypeTagHelper(ISponsorTypeService sponsorTypeService)
         {
-            this.sponsorTypeService = sponsorTypeService;
+            _sponsorTypeService = sponsorTypeService;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            IEnumerable<SponsorTypes> allSponsorTypes = _sponsorTypeService.GetAllSponsorTypes();
 
-            var allSponsorTypes = sponsorTypeService.GetAllSponsorTypes();
             output.TagName = "select";
             output.Attributes.SetAttribute("id", For.Name);
             output.Attributes.SetAttribute("name", For.Name);
-
             output.Attributes.Add("class", "form-control");
 
-            foreach (var sponsorType in allSponsorTypes)
+            foreach (SponsorTypes sponsorType in allSponsorTypes)
             {
-                TagBuilder myOption = new TagBuilder("option")
+                var option = new TagBuilder("option")
                 {
                     TagRenderMode = TagRenderMode.Normal
                 };
 
-                myOption.Attributes.Add("value", sponsorType.Id.ToString());
-                myOption.InnerHtml.Append((sponsorType.Name));
+                option.Attributes.Add("value", sponsorType.Id.ToString());
+                option.InnerHtml.Append((sponsorType.Name));
 
-                output.Content.AppendHtml(myOption);
+                // If the Model has already a value then select the option with that value
+                if (For.Model != null && sponsorType.Id == (int)For.Model)
+                {
+                    option.Attributes.Add("selected", "selected");
+                }
+
+                output.Content.AppendHtml(option);
             }
         }
     }

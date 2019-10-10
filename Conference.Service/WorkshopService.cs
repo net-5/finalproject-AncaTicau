@@ -1,7 +1,5 @@
 ﻿using Conference.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Conference.Data;
 
 namespace Conference.Service
@@ -18,56 +16,50 @@ namespace Conference.Service
 
     public class WorkshopService : IWorkshopService
     {
-        private readonly IWorkshopRepository workshopRepository;
+        private readonly IWorkshopRepository _workshopRepository;
+
         public WorkshopService(IWorkshopRepository workshopRepository)
         {
-            this.workshopRepository = workshopRepository;
+            _workshopRepository = workshopRepository;
         }
+
         public Workshops AddWorkshop(Workshops workshopToBeAdded)
         {
             if (IsUniqueWorkshop(workshopToBeAdded.Name))
             {
-                return workshopRepository.AddWorkshop(workshopToBeAdded);
+                return _workshopRepository.AddWorkshop(workshopToBeAdded);
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public IEnumerable<Workshops> GetAllWorkshops()
         {
-            return workshopRepository.GetAllWorkshops();
+            return _workshopRepository.GetAllWorkshops();
         }
 
         public Workshops GetWorkshopById(int id)
         {
-            return workshopRepository.GetWorkshopById(id);
+            return _workshopRepository.GetWorkshopById(id);
         }
 
         public Workshops UpdateWorkshop(Workshops workshopToUpdate)
         {
-            return workshopRepository.Update(workshopToUpdate);
+            return _workshopRepository.Update(workshopToUpdate);
         }
+
         private bool IsUniqueWorkshop(string workshopName)
         {
-            if (workshopRepository.IsUniqueWorkshop(workshopName) == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _workshopRepository.IsUniqueWorkshop(workshopName);
         }
         public void Delete(Workshops workshopToDelete)
         {
-            workshopRepository.Delete(workshopToDelete);
+            _workshopRepository.Delete(workshopToDelete);
 
         }
         public void Save()
         {
-            workshopRepository.Save();
+            _workshopRepository.Save();
         }
     }
 }

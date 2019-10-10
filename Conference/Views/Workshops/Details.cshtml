@@ -1,67 +1,48 @@
-﻿@model Conference.Domain.Entities.Workshops
+﻿@model WorkshopListItemViewModel
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, AuthoringTagHelpers
+
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = Model.Name;
 }
 
-<h1>Details</h1>
+<div id="workshop-details" class="container-fluid">
+    <div class="row">
+        <div class="offset-2 col-md-7 details">
+            <h1 class="title3">@Model.Name</h1>
+            <h2 class="title5 mt-3">@Html.Raw(Model.Description)</h2>
+        </div>
+        <div class="col-md-3 speakers">
+            @if (Model.Speakers.Count > 0)
+            {
+                <h2 class="title3 title4">Speakers</h2>
 
-<div>
-    <h4>Workshops</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Prerequisites)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Prerequisites)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Requirements)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Requirements)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PlacesAvailable)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PlacesAvailable)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Edition)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Edition)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RegistrationLink)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RegistrationLink)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Speaker)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Speaker.Description)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Index">Back to List</a>
+                foreach (SpeakerListItemViewModel speaker in Model.Speakers)
+                {
+                    <div class="photo" style="background-image: url('@speaker.PhotoUrl');"></div>
+                    <h3 class="speaker">
+                        <a class="link" href="@speaker.DetailsUrl">@speaker.Name</a>
+                    </h3>
+
+                    if (speaker.SocialLinks.Count > 0)
+                    {
+                        <ul class="speaker-socials">
+                            @foreach (SocialLink socialLink in speaker.SocialLinks)
+                            {
+                                <li><a href="@socialLink.Url" class="link"><i class="@socialLink.CssClass"></i></a></li>
+                            }
+                        </ul>
+                    }
+                }
+
+                <h3 class="title6">Date & time</h3>
+                <h3 class="title7">@Model.Prerequisites</h3>
+                <h3 class="title6">Location</h3>
+                <h3 class="title7">@Model.Requirements</h3>
+                <h3 class="title6">Places Available</h3>
+                <h3 class="title7">@Model.PlacesAvailable</h3>
+            }
+        </div>
+    </div>
 </div>

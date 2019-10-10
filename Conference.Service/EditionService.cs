@@ -1,8 +1,6 @@
 ﻿using Conference.Data;
 using Conference.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Conference.Service
 {
@@ -15,58 +13,55 @@ namespace Conference.Service
         void Delete(Editions editionToDelete);
         void Save();
     }
+
     public class EditionService : IEditionService
     {
-        private readonly IEditionRepository editionRepository;
+        private readonly IEditionRepository _editionRepository;
+
         public EditionService(IEditionRepository editionRepository)
         {
-            this.editionRepository = editionRepository;
+            _editionRepository = editionRepository;
         }
+
         public Editions AddEdition(Editions editionToBeAdded)
         {
             if (IsUniqueEdition(editionToBeAdded.Name))
             {
-                return editionRepository.AddEdition(editionToBeAdded);
+                return _editionRepository.AddEdition(editionToBeAdded);
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public IEnumerable<Editions> GetAllEditions()
         {
-            return editionRepository.GetAllEditions();
+            return _editionRepository.GetAllEditions();
         }
 
         public Editions GetEditionById(int id)
         {
-            return editionRepository.GetEditionById(id);
+            return _editionRepository.GetEditionById(id);
         }
 
         public Editions UpdateEdition(Editions editionToUpdate)
         {
-            return editionRepository.Update(editionToUpdate);
+            return _editionRepository.Update(editionToUpdate);
         }
+
         private bool IsUniqueEdition(string editionName)
         {
-            if (editionRepository.IsUniqueEdition(editionName) == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _editionRepository.IsUniqueEdition(editionName);
         }
+
         public void Delete(Editions editionToDelete)
         {
-            editionRepository.Delete(editionToDelete);
+            _editionRepository.Delete(editionToDelete);
 
         }
+
         public void Save()
         {
-            editionRepository.Save();
+            _editionRepository.Save();
         }
     }
 }

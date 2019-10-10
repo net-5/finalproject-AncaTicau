@@ -1,0 +1,14 @@
+﻿@model WorkshopListItemViewModel
+
+@{
+    string registrationLink = string.IsNullOrWhiteSpace(Model.RegistrationLink) ? "javascript:void(0)" : Model.RegistrationLink;
+}
+
+<div class="col-12 col-sm-6 col-md-3 workshop">
+    <span class="talk-time">@Model.Prerequisites</span>
+    <div class="title">
+        <a href="@Model.DetailsUrl">@Model.Name</a>
+    </div>
+    <span class="organizer">@Model.Speakers.First().Name</span>
+    <a href="@registrationLink" class="btn btn-info">Register</a>
+</div>

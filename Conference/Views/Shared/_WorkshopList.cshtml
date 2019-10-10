@@ -1,0 +1,34 @@
+﻿@model ICollection<WorkshopListItemViewModel>
+
+@{
+    var index = 0;
+}
+
+@foreach (WorkshopListItemViewModel item in Model)
+{
+    if (index == 0 || index % 4 == 0)
+    {
+        var cssClass = "row";
+
+        if (index > 0 && index % 4 == 0)
+        {
+            cssClass += " mt-5";
+        }
+
+        @Html.Raw($"<div class=\"{cssClass}\">");
+    }
+
+    await Html.RenderPartialAsync("_WorkshopListItem", item);
+
+    if (index > 0 && index % 4 == 3)
+    {
+        @Html.Raw("</div>");
+    }
+
+    index++;
+}
+
+@if (index > 0 && index % 4 != 3)
+{
+    @Html.Raw("</div>");
+}

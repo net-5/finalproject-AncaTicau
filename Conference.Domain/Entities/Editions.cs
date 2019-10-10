@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Conference.Domain.Entities
+﻿namespace Conference.Domain.Entities
 {
-    public partial class Editions
+    public class Editions
     {
         public int Id { get; set; }
         public string Name { get; set; }

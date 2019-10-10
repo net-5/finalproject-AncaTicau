@@ -1,7 +1,5 @@
 ﻿using Conference.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Conference.Data;
 
 namespace Conference.Service
@@ -15,60 +13,54 @@ namespace Conference.Service
         void Delete(Speakers speakerToDelete);
         void Save();
     }
+
     public class SpeakerService : ISpeakerService
     {
-        private readonly ISpeakersRepository speakersRepository;
+        private readonly ISpeakersRepository _speakersRepository;
+
         public SpeakerService(ISpeakersRepository speakersRepository)
         {
-            this.speakersRepository = speakersRepository;
+            _speakersRepository = speakersRepository;
         }
 
         private bool IsUniqueSpeaker(string speakerName)
         {
-            if (speakersRepository.IsUniqueSpeaker(speakerName) == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _speakersRepository.IsUniqueSpeaker(speakerName);
         }
+
         public Speakers AddSpeaker(Speakers speakerToBeAdded)
         {
             if (IsUniqueSpeaker(speakerToBeAdded.Name))
             {
-                return speakersRepository.AddSpeaker(speakerToBeAdded);
+                return _speakersRepository.AddSpeaker(speakerToBeAdded);
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public void Delete(Speakers speakerToDelete)
         {
-            speakersRepository.Delete(speakerToDelete);
+            _speakersRepository.Delete(speakerToDelete);
         }
 
         public IEnumerable<Speakers> GetAllSpeakers()
         {
-            return speakersRepository.GetAllSpeakers();
+            return _speakersRepository.GetAllSpeakers();
         }
 
         public Speakers GetSpeakerById(int id)
         {
-            return speakersRepository.GetSpeakersById(id);
+            return _speakersRepository.GetSpeakersById(id);
         }
 
         public void Save()
         {
-            speakersRepository.Save();
+            _speakersRepository.Save();
         }
 
         public Speakers UpdateSpeaker(Speakers speakerToUpdate)
         {
-            return speakersRepository.Update(speakerToUpdate);
+            return _speakersRepository.Update(speakerToUpdate);
         }
     }
 }

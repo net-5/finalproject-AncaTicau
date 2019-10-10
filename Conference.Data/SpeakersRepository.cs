@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Conference.Domain.Entities;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Conference.Data
 {
@@ -17,66 +17,58 @@ namespace Conference.Data
         void Save();
     }
 
-
     public class SpeakersRepository : ISpeakersRepository
     {
-        private readonly ConferenceContext conferenceContext;
+        private readonly ConferenceContext _conferenceContext;
 
         public SpeakersRepository(ConferenceContext conferenceContext)
         {
-            this.conferenceContext = conferenceContext;
+            _conferenceContext = conferenceContext;
         }
 
         public List<Speakers> GetAllSpeakers()
         {
-            return conferenceContext.Speakers.ToList();
+            return _conferenceContext.Speakers.Include(x => x.Workshops).ToList();
         }
 
         public Speakers AddSpeaker(Speakers speakerToBeAdded)
         {
-            var addedSpeaker = conferenceContext.Add(speakerToBeAdded);
-            conferenceContext.SaveChanges();
+            EntityEntry<Speakers> addedSpeaker = _conferenceContext.Add(speakerToBeAdded);
+            _conferenceContext.SaveChanges();
+
             return addedSpeaker.Entity;
         }
 
         public Speakers GetSpeakersById(int id)
         {
-            return conferenceContext.Speakers.Find(id);
+            return _conferenceContext.Speakers.Include(x => x.Workshops).FirstOrDefault(x => x.Id == id);
         }
 
         public Speakers Update(Speakers speakerToUpdate)
         {
-            var updatedSpeaker = conferenceContext.Update(speakerToUpdate);
-            conferenceContext.SaveChanges();
+            EntityEntry<Speakers> updatedSpeaker = _conferenceContext.Update(speakerToUpdate);
+            _conferenceContext.SaveChanges();
+
             return updatedSpeaker.Entity;
         }
 
         public bool IsUniqueSpeaker(string speakerName)
         {
-            int nr = conferenceContext.Speakers.Count(x => x.Name == speakerName);
-            if (nr == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            int nr = _conferenceContext.Speakers.Count(x => x.Name == speakerName);
 
+            return nr == 0;
         }
-
 
         public void Delete(Speakers speakerToDelete)
         {
-            speakerToDelete = conferenceContext.Speakers.Find(speakerToDelete.Id);
-            conferenceContext.Speakers.Remove(speakerToDelete);
+            speakerToDelete = _conferenceContext.Speakers.Find(speakerToDelete.Id);
 
+            _conferenceContext.Speakers.Remove(speakerToDelete);
         }
+
         public void Save()
         {
-            conferenceContext.SaveChanges();
+            _conferenceContext.SaveChanges();
         }
-
-
     }
 }

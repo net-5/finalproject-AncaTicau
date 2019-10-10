@@ -1,7 +1,5 @@
 ﻿using Conference.Domain.Entities;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using Conference.Data;
 
 namespace Conference.Service
@@ -15,60 +13,54 @@ namespace Conference.Service
         void Delete(Talks talkToDelete);
         void Save();
     }
+
     public class TalkService : ITalkService
     {
-        private readonly ITalksRepository talksRepository;
+        private readonly ITalksRepository _talksRepository;
+
         public TalkService(ITalksRepository talksRepository)
         {
-            this.talksRepository = talksRepository;
+            _talksRepository = talksRepository;
         }
 
         private bool IsUniqueSpeaker(string talkName)
         {
-            if (talksRepository.IsUniqueTalk(talkName) == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return _talksRepository.IsUniqueTalk(talkName);
         }
+
         public Talks AddTalk(Talks talkToBeAdded)
         {
             if (IsUniqueSpeaker(talkToBeAdded.Name))
             {
-                return talksRepository.AddTalk(talkToBeAdded);
+                return _talksRepository.AddTalk(talkToBeAdded);
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public void Delete(Talks talkToDelete)
         {
-            talksRepository.Delete(talkToDelete);
+            _talksRepository.Delete(talkToDelete);
         }
 
         public IEnumerable<Talks> GetAllTalks()
         {
-            return talksRepository.GetAllTalks();
+            return _talksRepository.GetAllTalks();
         }
 
         public Talks GetTalkById(int id)
         {
-            return talksRepository.GetTalkById(id);
+            return _talksRepository.GetTalkById(id);
         }
 
         public void Save()
         {
-            talksRepository.Save();
+            _talksRepository.Save();
         }
 
         public Talks UpdateTalk(Talks talkToUpdate)
         {
-            return talksRepository.Update(talkToUpdate);
+            return _talksRepository.Update(talkToUpdate);
         }
     }
 }

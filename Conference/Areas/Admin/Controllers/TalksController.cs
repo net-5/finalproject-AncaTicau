@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using Conference.Domain.Entities;
 using Conference.Service;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Areas.Admin.Controllers
 {
     public class TalksController : Controller
     {
-        private readonly ITalkService talkService;
+        private readonly ITalkService _talkService;
+
         public TalksController(ITalkService talkService)
         {
-            this.talkService = talkService;
+            _talkService = talkService;
         }
 
         [Area("Admin")]
         // GET: Talks
         public ActionResult Index()
         {
-            var allTalks = talkService.GetAllTalks();
+            IEnumerable<Talks> allTalks = _talkService.GetAllTalks();
             return View(allTalks);
         }
 
@@ -31,7 +27,7 @@ namespace Conference.Areas.Admin.Controllers
         // GET: Talks/Details/5
         public ActionResult Details(int id)
         {
-            Talks talk = talkService.GetTalkById(id);
+            Talks talk = _talkService.GetTalkById(id);
             return View(talk);
         }
 
@@ -50,28 +46,26 @@ namespace Conference.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var addedTalk = talkService.AddTalk(model);
+                Talks addedTalk = _talkService.AddTalk(model);
+
                 if (addedTalk == null)
                 {
                     ModelState.AddModelError("Name", "Talks name must be unique!");
                     return View(model);
                 }
-                else
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+
+                return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
         // GET: Talks/Edit/5
         public ActionResult Edit(int id)
         {
-            var talk = talkService.GetTalkById(id);
+            Talks talk = _talkService.GetTalkById(id);
+
             return View(talk);
         }
 
@@ -83,15 +77,15 @@ namespace Conference.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingTalk = talkService.GetTalkById(id);
+                Talks existingTalk = _talkService.GetTalkById(id);
+
                 TryUpdateModelAsync(existingTalk);
-                talkService.UpdateTalk(existingTalk);
+                _talkService.UpdateTalk(existingTalk);
+
                 return RedirectToAction(nameof(Index));
             }
-            else
-            {
-                return View(model);
-            }
+
+            return View(model);
         }
 
         [Area("Admin")]
@@ -102,16 +96,16 @@ namespace Conference.Areas.Admin.Controllers
             {
                 ViewBag.ErrorMessage = "Delete failed. try again, and if problem persists, contact your system administrator.";
             }
-            Talks talkToDelete = talkService.GetTalkById(id);
+
+            Talks talkToDelete = _talkService.GetTalkById(id);
+
             if (talkToDelete == null)
             {
                 return NotFound();
 
             }
-            else
-            {
-                return View(talkToDelete);
-            }
+
+            return View(talkToDelete);
         }
 
         [Area("Admin")]
@@ -122,14 +116,16 @@ namespace Conference.Areas.Admin.Controllers
         {
             try
             {
-                Talks talkToDelete = talkService.GetTalkById(id);
-                talkService.Delete(talkToDelete);
-                talkService.Save();
+                Talks talkToDelete = _talkService.GetTalkById(id);
+
+                _talkService.Delete(talkToDelete);
+                _talkService.Save();
             }
             catch (DataException)
             {
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }
+
             return RedirectToAction(nameof(Index));
         }
     }

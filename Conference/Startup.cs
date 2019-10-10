@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Conference.Constants;
 using Conference.Data;
 using Conference.Domain.Entities;
+using Conference.Interfaces;
 using Conference.Service;
+using Conference.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -35,24 +34,26 @@ namespace Conference
 
             services.AddDbContext<ConferenceContext>();
 
-            services.AddTransient<IEditionRepository, EditionRepository>();
-            services.AddTransient<IEditionService, EditionService>();
+            services.AddScoped<IEditionRepository, EditionRepository>();
+            services.AddScoped<IEditionService, EditionService>();
 
-            services.AddTransient<ISpeakersRepository, SpeakersRepository>();
-            services.AddTransient<ISpeakerService, SpeakerService>();
+            services.AddScoped<ISpeakersRepository, SpeakersRepository>();
+            services.AddScoped<ISpeakerService, SpeakerService>();
 
-            services.AddTransient<ITalksRepository, TalksRepository>();
-            services.AddTransient<ITalkService, TalkService>();
+            services.AddScoped<ITalksRepository, TalksRepository>();
+            services.AddScoped<ITalkService, TalkService>();
 
-            services.AddTransient<IWorkshopRepository, WorkshopRepository>();
-            services.AddTransient<IWorkshopService, WorkshopService>();
+            services.AddScoped<IWorkshopRepository, WorkshopRepository>();
+            services.AddScoped<IWorkshopService, WorkshopService>();
 
-            services.AddTransient<ISponsorsRepository, SponsorsRepository>();
-            services.AddTransient<ISponsorService, SponsorService>();
+            services.AddScoped<ISponsorsRepository, SponsorsRepository>();
+            services.AddScoped<ISponsorService, SponsorService>();
 
-            services.AddTransient<ISponsorTypesRepository, SponsorTypesRepository>();
-            services.AddTransient<ISponsorTypeService, SponsorTypeService>();
+            services.AddScoped<ISponsorTypesRepository, SponsorTypesRepository>();
+            services.AddScoped<ISponsorTypeService, SponsorTypeService>();
 
+            services.AddScoped<ISpeakerAppService, SpeakerAppService>();
+            services.AddScoped<IWorkshopAppService, WorkshopAppService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
@@ -74,16 +75,21 @@ namespace Conference
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                  name: "areaRoute",
-                  template: "{area:exists}/{controller}/{action}/{id?}",
-                  defaults: new { area = "Admin", controller = "Home", action = "Index" }
-                  );
-
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
+                routes
+                    .MapRoute(
+                        name: "areaRoute",
+                        template: "{area:exists}/{controller}/{action}/{id?}",
+                        defaults: new { area = "Admin", controller = "Home", action = "Index" }
+                    )
+                    .MapRoute(
+                        name: RouteName.Details,
+                        template: "{controller}/{id:int}",
+                        defaults: new { action = "Details" }
+                    )
+                    .MapRoute(
+                        name: "default",
+                        template: "{controller=Home}/{action=Index}/{id?}"
+                    );
             });
         }
     }

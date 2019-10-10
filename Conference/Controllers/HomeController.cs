@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using Conference.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Conference.Models;
 
@@ -10,12 +8,21 @@ namespace Conference.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ISpeakerAppService _speakerAppService;
+
+        public HomeController(ISpeakerAppService speakerAppService)
         {
-            return View();
+            _speakerAppService = speakerAppService;
         }
 
-        public IActionResult NotFound()
+        public IActionResult Index()
+        {
+            IList<SpeakerListItemViewModel> viewModel = _speakerAppService.GetSpeakerListViewModel(Url);
+
+            return View(viewModel);
+        }
+
+        public IActionResult NotFoundPage()
         {
             return View();
         }
